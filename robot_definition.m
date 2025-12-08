@@ -13,9 +13,9 @@ L3a_val = 0.4 + 0.01*D(3);
 L4a_val = 0.5 - 0.02*D(7);
 
 % Kinematic configuration:
-L(1) = Link('d', L1a_val, 'a', 0,                           'alpha', pi/2, 'offset', 0);
-L(2) = Link('d', 0,       'a', - sqrt(L2a_val^2 + L3a_val^2), 'alpha', 0, 'offset', atan2(L2a_val,L3a_val) + pi);
-L(3) = Link('d', 0,       'a', L4a_val,             'alpha', 0, 'offset', -atan2(L2a_val,L3a_val) + pi);
+L(1) = Link('offset', 0,                                   'd', L1a_val,        'a', 0,                                 'alpha', pi/2);
+L(2) = Link('offset', atan2(L2a_val,L3a_val) + pi,         'd', 0,              'a', - sqrt(L2a_val^2 + L3a_val^2),     'alpha', 0);
+L(3) = Link('offset', -atan2(L2a_val,L3a_val) + pi,        'd', 0,              'a', L4a_val,                           'alpha', 0);
 
 % Link masses:
 L(1).m = 4;
