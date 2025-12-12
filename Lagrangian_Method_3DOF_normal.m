@@ -1,7 +1,7 @@
 %% Lagrangian Method for a 3 DOF robot
-% clear all
-% close all
-% clc
+clear
+close all
+clc
 
 %% Definition of symbolic variables:
 

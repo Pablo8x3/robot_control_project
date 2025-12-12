@@ -1,9 +1,13 @@
-D = [2 9 5 5 5 5 5 8];
+clear all
+close all
+clc
 
-L1a_val = 0.9 - 0.04*D(2); 
-L2a_val = 0.4 + 0.02*D(6); 
-L3a_val = 0.4 + 0.01*D(3); 
-L4a_val = 0.5 - 0.02*D(7);
+DNI = [2 9 5 5 5 5 5 8];
+
+L1a_val = 0.9 - 0.04*DNI(2); 
+L2a_val = 0.4 + 0.02*DNI(6); 
+L3a_val = 0.4 + 0.01*DNI(3); 
+L4a_val = 0.5 - 0.02*DNI(7);
 
 m1_val = 4;
 m2_val = 2.7;
@@ -47,10 +51,13 @@ Bm = [0.0014 0.0019 0.0022];
 Jm = [L(1).Jm L(2).Jm L(3).Jm];
 N = [100 100 100];
 
-Tm = 0.01;
+
 q_inicial = [0 0 0];
-qf = [pi/2 pi/2 pi/2];
-Tmax = 10;% s
+qf = [pi/2 pi/8 pi/8];
+Tmax = 5;% s
+
+
+
 
 % Parametros de Controladores
 s = tf ("s");
@@ -94,7 +101,7 @@ P = Kc;
 I = 1./Ti;
 D = Td;
 
-unc = 0.2;
+unc = 0;
 
 
 C1 = Kc(1)*(1 + Td(1)*s + 1/(Ti(1)*s));
@@ -106,10 +113,38 @@ L2 = C2*G2;
 C3 = Kc(3)*(3 + Td(3)*s + 1/(Ti(3)*s));
 L3 = C3*G3;
 
-% Ti = 1/Ti;
+%% Calculate Appropriate Sample Time
+fprintf('\n=== SAMPLE TIME CALCULATION ===\n');
 
-% figure
-% margin(G)
+% Method 1: Based on natural frequencies
+wn = (km ./ Jm);
+fprintf('Natural frequencies: [%.2f, %.2f, %.2f] rad/s\n', wn);
+Ts_wn = (2*pi) / (10 * max(wn));
+
+% Method 2: Based on time constants
+tau = D;
+fprintf('Time constants: [%.4f, %.4f, %.4f] s\n', tau);
+Ts_tau = min(tau) / 20;
+
+% Method 3: Based on settling time
+ts = 4 * D;
+fprintf('Settling times: [%.4f, %.4f, %.4f] s\n', ts);
+Ts_ts = min(ts) / 100;
+
+% Select the most conservative (smallest) sample time
+Ts_calculated = min([Ts_wn, Ts_tau, Ts_ts]);
+fprintf('\nRecommended sample times:\n');
+fprintf('  - Based on bandwidth: %.5f s (%.1f Hz)\n', Ts_wn, 1/Ts_wn);
+fprintf('  - Based on time constants: %.5f s (%.1f Hz)\n', Ts_tau, 1/Ts_tau);
+fprintf('  - Based on settling time: %.5f s (%.1f Hz)\n', Ts_ts, 1/Ts_ts);
+fprintf('\n>>> RECOMMENDED Ts = %.5f s (%.1f Hz) <<<\n', Ts_calculated, 1/Ts_calculated);
+
+% Update Tm with calculated value (or keep 0.001 if it's appropriate)
+Tm = Ts_calculated;  % Or use: Tm = 0.001 if you prefer
+fprintf('Using Ts = %.5f s in simulation\n', Tm);
+
+
+% Tm = 0.001;
 
 
 %% Ejecución de la Simulación
@@ -191,19 +226,42 @@ subplot(3,1,1)
 plot(out.u1.Time, out.u1.Data, 'LineWidth', 2.5);
 grid on
 xlabel('Time')
-ylabel('u1 (Nm)')
+ylabel('u1 (V)')
 title('Control Actions in u1')
 
 subplot(3,1,2)
 plot(out.u2.Time, out.u2.Data, 'LineWidth', 2.5);
 grid on
 xlabel('Time')
-ylabel('u2 (Nm)')
+ylabel('u2 (V)')
 title('Control Actions in u2')
 
 subplot(3,1,3)
 plot(out.u3.Time, out.u3.Data, 'LineWidth', 2.5);
 grid on
 xlabel('Time')
-ylabel('u3 (Nm)')
+ylabel('u3 (V)')
 title('Control Actions in u3')
+
+
+%% Export figures as PNG
+
+% Define folder to save images
+folderName = 'results_PID';
+if ~exist(folderName, 'dir')
+    mkdir(folderName);
+end
+
+% Get all figure handles
+figHandles = findall(0, 'Type', 'figure');
+
+% Loop through figures and save each as PNG
+for k = 1:length(figHandles)
+    fig = figHandles(k);
+    % Create filename
+    fileName = fullfile(folderName, ['pid' num2str(k) '.png']);
+    % Save as PNG
+    saveas(fig, fileName);
+end
+
+disp(['Figures saved to folder: ' folderName]);
