@@ -82,7 +82,7 @@ mag = [mag1; mag2; mag3];
 phase = [phase1; phase2; phase3];
 
 Mf_wcp = 180 + phase; % PMa
-AMf = 80 - Mf_wcp + 10;
+AMf = 80 - Mf_wcp + 15;
 
 % Cálculo de T1 y T2 para cada modelo
 T1 = 10 ./ wcp .* ones(3,1);
