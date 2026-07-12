@@ -313,4 +313,4 @@ run('circle_drawing.m')   % 3-D circle + joint-space solution via ikine
 **Pablo Carneado López** — B.Eng. Robotics and Mechatronics, Universidad Loyola Andalucía
 Course: *Robot Programming and Control* · Supervised by Prof. Guillermo Bejarano Pellicer
 
-📄 The full technical report (kinematic derivations, dynamic matrices, controller tuning rationale) is available in [`docs/report.pdf`](docs/report.pdf).
+📄 The full technical report (kinematic derivations, dynamic matrices, controller tuning rationale) is available in [`docs/Robot_Control_Project.pdf`](docs/Robot_Control_Project.pdf).
