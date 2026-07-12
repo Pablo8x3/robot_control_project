@@ -3,7 +3,7 @@ close all
 clc
 
 
-DNI = [2 9 5 5 5 5 5 8];
+DNI = [1 2 3 4 5 6 7 8];
 
 
 

@@ -1,0 +1,29 @@
+# MATLAB / Simulink cache & autosave junk
+slprj/
+*.slxc
+*.asv
+*.autosave
+*.slx.autosave
+*.slx.original
+*.original
+*.mexa64
+*.mexw64
+*.mexmaci64
+
+# LaTeX build artifacts (if you keep the report sources in the repo)
+*.aux
+*.log
+*.out
+*.toc
+*.equ
+*.fls
+*.fdb_latexmk
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.synctex.gz
+
+# OS noise
+.DS_Store
+Thumbs.db

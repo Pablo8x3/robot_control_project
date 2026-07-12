@@ -5,7 +5,7 @@
 set(0,'DefaultFigureWindowStyle','docked')
 
 %% Link definition:
-D = [2 9 5 5 5 5 5 8];
+D = [1 2 3 4 5 6 7 8];
 
 L1a_val = 0.9 - 0.04*D(2); 
 L2a_val = 0.4 + 0.02*D(6); 
